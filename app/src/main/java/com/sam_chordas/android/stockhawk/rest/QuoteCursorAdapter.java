@@ -2,10 +2,12 @@ package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +47,12 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
   @Override
   public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor){
-    viewHolder.symbol.setText(cursor.getString(cursor.getColumnIndex("symbol")));
-    viewHolder.bidPrice.setText(cursor.getString(cursor.getColumnIndex("bid_price")));
+    Log.d("blarg", DatabaseUtils.dumpCursorToString(cursor));
+    String companyName = cursor.getString(cursor.getColumnIndex("name"));
+    String symbol = cursor.getString(cursor.getColumnIndex("symbol"));
+    viewHolder.symbol.setText(symbol);
+    String bidPrice = cursor.getString(cursor.getColumnIndex("bid_price"));
+    viewHolder.bidPrice.setText(bidPrice);
     int sdk = Build.VERSION.SDK_INT;
     if (cursor.getInt(cursor.getColumnIndex("is_up")) == 1){
       if (sdk < Build.VERSION_CODES.JELLY_BEAN){
@@ -65,11 +71,12 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
             mContext.getResources().getDrawable(R.drawable.percent_change_pill_red));
       }
     }
-    if (Utils.showPercent){
-      viewHolder.change.setText(cursor.getString(cursor.getColumnIndex("percent_change")));
-    } else{
-      viewHolder.change.setText(cursor.getString(cursor.getColumnIndex("change")));
-    }
+    String change = cursor.getString(cursor.getColumnIndex(
+            Utils.showPercent ? "percent_change" : "change"));
+    viewHolder.change.setText(change);
+
+    viewHolder.itemView.setContentDescription(String.format(
+            mContext.getString(R.string.item_view_description), companyName, bidPrice, change));
   }
 
   @Override public void onItemDismiss(int position) {

@@ -9,4 +9,7 @@
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+
+  <!-- Formatted content description for line items -->
+  <string name="item_view_description">%1$s at %2$s per share - %3$s</string>
 </resources>
