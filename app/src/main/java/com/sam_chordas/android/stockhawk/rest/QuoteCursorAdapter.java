@@ -47,7 +47,6 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
   @Override
   public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor){
-    Log.d("blarg", DatabaseUtils.dumpCursorToString(cursor));
     String companyName = cursor.getString(cursor.getColumnIndex("name"));
     String symbol = cursor.getString(cursor.getColumnIndex("symbol"));
     viewHolder.symbol.setText(symbol);
