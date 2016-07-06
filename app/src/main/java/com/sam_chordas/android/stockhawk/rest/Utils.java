@@ -21,7 +21,7 @@ public class Utils {
 
   public static boolean showPercent = true;
 
-  public static ArrayList quoteJsonToContentVals(String JSON){
+  public static ArrayList quoteJsonToContentVals(String JSON) throws UnknownSymbolException {
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
     JSONObject jsonObject = null;
     JSONArray resultsArray = null;
@@ -33,6 +33,10 @@ public class Utils {
         if (count == 1){
           jsonObject = jsonObject.getJSONObject("results")
               .getJSONObject("quote");
+          if (jsonObject.getString("Bid") == "null") {
+            throw new UnknownSymbolException(
+                    "Unkown symbol: " + jsonObject.getString("symbol"));
+          }
           batchOperations.add(buildBatchOperation(jsonObject));
         } else{
           resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
@@ -95,5 +99,11 @@ public class Utils {
       e.printStackTrace();
     }
     return builder.build();
+  }
+
+  public static class UnknownSymbolException extends RuntimeException {
+    public UnknownSymbolException(String message) {
+      super(message);
+    }
   }
 }
