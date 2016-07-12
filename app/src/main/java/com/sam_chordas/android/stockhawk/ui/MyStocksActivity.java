@@ -98,6 +98,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 mCursor.moveToPosition(position);
                 args.putString("stock", mCursor.getString(
                         mCursor.getColumnIndex(QuoteColumns.SYMBOL)));
+                args.putInt("isup", mCursor.getInt(
+                        mCursor.getColumnIndex(QuoteColumns.ISUP)));
                 newFragment.setArguments(args);
                 newFragment.show(ft, "dialog");
               }

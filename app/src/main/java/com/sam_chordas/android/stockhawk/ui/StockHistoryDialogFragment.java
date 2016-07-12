@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +36,19 @@ import java.util.Date;
 
 public class StockHistoryDialogFragment extends DialogFragment {
     private ChartView mChart;
+    private int mColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, 0);
 
-        if (getArguments() != null) {
+        Bundle args = getArguments();
+        if (args != null) {
+            mColor = ContextCompat.getColor(getActivity(), (args.getInt("isup") == 0)
+                    ? R.color.material_red_700 : R.color.material_green_700);
             GetStockHistoryTask historyLoader = new GetStockHistoryTask();
-            historyLoader.execute(getArguments().getString("stock"));
+            historyLoader.execute(args.getString("stock"));
         }
     }
 
@@ -54,6 +59,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
         mChart = (LineChartView) v.findViewById(R.id.linechart);
         mChart.setXLabels(AxisController.LabelPosition.NONE);
 
+        mChart.setAxisColor(mColor);
+        mChart.setLabelsColor(mColor);
 
         return v;
     }
@@ -118,6 +125,7 @@ public class StockHistoryDialogFragment extends DialogFragment {
                 int min = (int) Math.floor(set.getMin().getValue());
                 int max = (int) Math.ceil(set.getMax().getValue());
                 int step = (max-min)/10;
+                set.setColor(mColor);
                 mChart.setAxisBorderValues(min-5,
                         max);
                 mChart.setStep((step > 1) ? step : 1);
