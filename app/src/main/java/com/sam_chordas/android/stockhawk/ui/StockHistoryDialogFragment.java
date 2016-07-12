@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.db.chart.model.LineSet;
+import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.sam_chordas.android.stockhawk.R;
@@ -51,6 +52,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_line_graph, container, false);
         mChart = (LineChartView) v.findViewById(R.id.linechart);
+        mChart.setXLabels(AxisController.LabelPosition.NONE);
+
 
         return v;
     }
