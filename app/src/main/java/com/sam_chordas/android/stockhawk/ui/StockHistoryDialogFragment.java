@@ -115,6 +115,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
         @Override
         protected void onPostExecute(LineSet set) {
             if (set != null) {
+                mChart.setAxisBorderValues((int) Math.floor(set.getMin().getValue())-5,
+                        (int) Math.ceil(set.getMax().getValue()));
                 mChart.addData(set);
                 mChart.show();
             }
