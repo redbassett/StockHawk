@@ -94,6 +94,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 ft.addToBackStack(null);
 
                 StockHistoryDialogFragment newFragment = new StockHistoryDialogFragment();
+                Bundle args = new Bundle();
+                mCursor.moveToPosition(position);
+                args.putString("stock", mCursor.getString(
+                        mCursor.getColumnIndex(QuoteColumns.SYMBOL)));
+                newFragment.setArguments(args);
                 newFragment.show(ft, "dialog");
               }
             }));
