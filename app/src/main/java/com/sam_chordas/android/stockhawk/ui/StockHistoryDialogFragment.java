@@ -117,9 +117,10 @@ public class StockHistoryDialogFragment extends DialogFragment {
             if (set != null) {
                 int min = (int) Math.floor(set.getMin().getValue());
                 int max = (int) Math.ceil(set.getMax().getValue());
+                int step = (max-min)/10;
                 mChart.setAxisBorderValues(min-5,
                         max);
-                mChart.setStep((max-min)/10);
+                mChart.setStep((step > 1) ? step : 1);
                 mChart.addData(set);
                 mChart.show();
             }
