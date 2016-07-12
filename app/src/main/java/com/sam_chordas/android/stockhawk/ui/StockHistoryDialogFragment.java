@@ -125,8 +125,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
                 urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
                 urlStringBuilder.append(URLEncoder.encode(
                         "select * from yahoo.finance.historicaldata where symbol = \"" + symbol +
-                                "\" and startDate = \"" + format.format(startDate) + "\" and endDate = \"" +
-                                format.format(endDate) + "\"", "UTF-8"));
+                                "\" and startDate = \"" + format.format(startDate) +
+                                "\" and endDate = \"" + format.format(endDate) + "\"", "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
