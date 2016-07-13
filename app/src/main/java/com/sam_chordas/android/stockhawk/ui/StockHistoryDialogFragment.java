@@ -84,7 +84,7 @@ public class StockHistoryDialogFragment extends DialogFragment {
 
             Calendar cal = Calendar.getInstance();
             Date endDate = cal.getTime();
-            cal.add(Calendar.MONTH, -6);
+            cal.add(Calendar.MONTH, -3);
             Date startDate = cal.getTime();
 
             String urlString = YahooStockApi.getStockHistoryUrl(params[0], startDate, endDate);
