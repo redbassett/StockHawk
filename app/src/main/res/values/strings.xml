@@ -15,4 +15,8 @@
 
   <!-- Stock list page content descriptions -->
   <string name="fab_add_stock_description">Add New Stock</string>
+
+  <!-- Empty States -->
+  <string name="empty_view_default">No data to show. Try adding some stocks.</string>
+  <string name="empty_view_no_network">Please check your network connection.</string>
 </resources>

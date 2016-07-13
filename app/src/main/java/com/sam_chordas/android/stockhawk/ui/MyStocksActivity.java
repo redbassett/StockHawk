@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +38,8 @@ import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
+
+import static android.view.View.GONE;
 
 public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -55,6 +58,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Context mContext;
   private Cursor mCursor;
   boolean isConnected;
+  private TextView mEmptyView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +173,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
       // are updated.
       GcmNetworkManager.getInstance(this).schedule(periodicTask);
     }
+
+    mEmptyView = (TextView) findViewById(R.id.recycler_view_empty);
   }
 
 
@@ -227,11 +233,27 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   public void onLoadFinished(Loader<Cursor> loader, Cursor data){
     mCursorAdapter.swapCursor(data);
     mCursor = data;
+    updateEmptyView();
   }
 
   @Override
   public void onLoaderReset(Loader<Cursor> loader){
     mCursorAdapter.swapCursor(null);
+  }
+
+  private void updateEmptyView() {
+    if (mEmptyView != null) {
+      if (mCursorAdapter.getItemCount() == 0) {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        mEmptyView.setText(getString(
+                (activeNetwork != null && activeNetwork.isConnectedOrConnecting())
+                        ? R.string.empty_view_default : R.string.empty_view_no_network));
+        mEmptyView.setVisibility(View.VISIBLE);
+      } else
+        mEmptyView.setVisibility(GONE);
+    }
   }
 
 }
