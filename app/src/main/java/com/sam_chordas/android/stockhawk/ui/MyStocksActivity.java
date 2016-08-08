@@ -91,21 +91,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
             new RecyclerViewItemClickListener.OnItemClickListener() {
               @Override public void onItemClick(View v, int position) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null)
-                  ft.remove(prev);
-                ft.addToBackStack(null);
-
-                StockHistoryDialogFragment newFragment = new StockHistoryDialogFragment();
-                Bundle args = new Bundle();
                 mCursor.moveToPosition(position);
-                args.putString("stock", mCursor.getString(
+                launchHistoryFragment(mCursor.getString(
                         mCursor.getColumnIndex(QuoteColumns.SYMBOL)));
-                args.putInt("isup", mCursor.getInt(
-                        mCursor.getColumnIndex(QuoteColumns.ISUP)));
-                newFragment.setArguments(args);
-                newFragment.show(ft, "dialog");
               }
             }));
     recyclerView.setAdapter(mCursorAdapter);
@@ -175,6 +163,20 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
     mEmptyView = (TextView) findViewById(R.id.recycler_view_empty);
+  private void launchHistoryFragment(String stockSymbol) {
+    final String FRAGTAG = "dialog";
+
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    Fragment prev = getFragmentManager().findFragmentByTag(FRAGTAG);
+    if (prev != null)
+      ft.remove(prev);
+    ft.addToBackStack(null);
+
+    StockHistoryDialogFragment newFragment = new StockHistoryDialogFragment();
+    Bundle args = new Bundle();
+    args.putString("stock", stockSymbol);
+    newFragment.setArguments(args);
+    newFragment.show(ft, FRAGTAG);
   }
 
 

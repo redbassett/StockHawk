@@ -36,7 +36,6 @@ import java.util.Date;
 
 public class StockHistoryDialogFragment extends DialogFragment {
     private ChartView mChart;
-    private int mColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,8 +44,6 @@ public class StockHistoryDialogFragment extends DialogFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            mColor = ContextCompat.getColor(getActivity(), (args.getInt("isup") == 0)
-                    ? R.color.material_red_700 : R.color.material_green_700);
             GetStockHistoryTask historyLoader = new GetStockHistoryTask();
             historyLoader.execute(args.getString("stock"));
         }
@@ -58,9 +55,6 @@ public class StockHistoryDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.activity_line_graph, container, false);
         mChart = (LineChartView) v.findViewById(R.id.linechart);
         mChart.setXLabels(AxisController.LabelPosition.NONE);
-
-        mChart.setAxisColor(mColor);
-        mChart.setLabelsColor(mColor);
 
         return v;
     }
@@ -122,10 +116,16 @@ public class StockHistoryDialogFragment extends DialogFragment {
         @Override
         protected void onPostExecute(LineSet set) {
             if (set != null) {
+                float diff = set.getValue(0) - set.getValue(1);
+                int color = ContextCompat.getColor(getActivity(), (diff < 0)
+                        ? R.color.material_red_700 : R.color.material_green_700);
+                mChart.setAxisColor(color);
+                mChart.setLabelsColor(color);
+
                 int min = (int) Math.floor(set.getMin().getValue());
                 int max = (int) Math.ceil(set.getMax().getValue());
                 int step = (max-min)/10;
-                set.setColor(mColor);
+                set.setColor(color);
                 mChart.setAxisBorderValues(min - new Double((max-min)*0.3).intValue(),
                         max);
                 mChart.setStep((step > 1) ? step : 1);
