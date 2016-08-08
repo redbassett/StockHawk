@@ -2,6 +2,7 @@ package com.sam_chordas.android.stockhawk.service;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -24,6 +25,8 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import static com.sam_chordas.android.stockhawk.widget.StockWidgetProvider.ACTION_DATA_UPDATED;
 
 /**
  * Created by sam_chordas on 9/30/15.
@@ -146,7 +149,15 @@ public class StockTaskService extends GcmTaskService{
       }
     }
 
+    updateWidgets();
+
     return result;
+  }
+
+  private void updateWidgets() {
+    Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+            .setPackage(mContext.getPackageName());
+    mContext.sendBroadcast(dataUpdatedIntent);
   }
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:initialKeyguardLayout="@layout/widget_stock"
+    android:initialLayout="@layout/widget_stock"
+    android:minWidth="@dimen/stock_widget_min_resize_width"
+    android:minHeight="@dimen/stock_widget_min_resize_height"
+    android:minResizeWidth="@dimen/stock_widget_min_resize_width"
+    android:minResizeHeight="@dimen/stock_widget_min_resize_height"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard"
+    tools:ignore="UnusedAttribute"/>

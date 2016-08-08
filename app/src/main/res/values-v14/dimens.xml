@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ignore padding in ICS (which automatically implements padding) -->
+    <dimen name="widget_padding">0dp</dimen>
+</resources>

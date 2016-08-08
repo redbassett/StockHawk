@@ -19,4 +19,7 @@
   <!-- Empty States -->
   <string name="empty_view_default">No data to show. Try adding some stocks.</string>
   <string name="empty_view_no_network">Please check your network connection.</string>
+
+  <!-- Widget -->
+  <string name="stock_widget_title">My Stocks</string>
 </resources>

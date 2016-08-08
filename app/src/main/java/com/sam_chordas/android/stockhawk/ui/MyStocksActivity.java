@@ -60,6 +60,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   boolean isConnected;
   private TextView mEmptyView;
 
+  public static final String STOCK_HISTORY_EXTRA_KEY = "stock_history";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -163,6 +165,17 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
     mEmptyView = (TextView) findViewById(R.id.recycler_view_empty);
+
+    // Launch the history fragment for stocks clicked in the widget
+    Intent intent = getIntent();
+    Bundle extras = intent.getExtras();
+    if (extras != null) {
+      if (extras.containsKey(STOCK_HISTORY_EXTRA_KEY)) {
+        launchHistoryFragment(extras.getString(STOCK_HISTORY_EXTRA_KEY));
+      }
+    }
+  }
+
   private void launchHistoryFragment(String stockSymbol) {
     final String FRAGTAG = "dialog";
 
