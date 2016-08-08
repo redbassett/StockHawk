@@ -36,6 +36,7 @@ import java.util.Date;
 
 public class StockHistoryDialogFragment extends DialogFragment {
     private ChartView mChart;
+    private Dialog mDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,16 +64,16 @@ public class StockHistoryDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+        mDialog = getDialog();
+        if (mDialog != null) {
+            mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
         }
     }
 
-    private class GetStockHistoryTask extends AsyncTask<String, Void, LineSet> {
+    private class GetStockHistoryTask extends AsyncTask<String, Void, LineSetWrapper> {
         @Override
-        protected LineSet doInBackground(String... params) {
+        protected LineSetWrapper doInBackground(String... params) {
             if (params.length == 0)
                 return null;
 
@@ -101,7 +102,7 @@ public class StockHistoryDialogFragment extends DialogFragment {
                         set.addPoint(point.getString("Date"), (float) point.getDouble("Close"));
                     }
 
-                    return set;
+                    return new LineSetWrapper(dataPoints.getJSONObject(0).getString("Symbol"), set);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -114,7 +115,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
         }
 
         @Override
-        protected void onPostExecute(LineSet set) {
+        protected void onPostExecute(LineSetWrapper wrapper) {
+            LineSet set = wrapper.set;
             if (set != null) {
                 float diff = set.getValue(0) - set.getValue(1);
                 int color = ContextCompat.getColor(getActivity(), (diff < 0)
@@ -131,6 +133,8 @@ public class StockHistoryDialogFragment extends DialogFragment {
                 mChart.setStep((step > 1) ? step : 1);
                 mChart.addData(set);
                 mChart.show();
+
+                mDialog.setTitle(wrapper.symbol);
             }
         }
     }
@@ -153,6 +157,17 @@ public class StockHistoryDialogFragment extends DialogFragment {
                     + "org%2Falltableswithkeys&callback=");
 
             return urlStringBuilder.toString();
+        }
+    }
+
+
+    protected class LineSetWrapper {
+        public String symbol;
+        public LineSet set;
+
+        public LineSetWrapper(String symbol, LineSet set) {
+            this.symbol = symbol;
+            this.set = set;
         }
     }
 }
