@@ -1,5 +1,6 @@
 package com.sam_chordas.android.stockhawk.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.AsyncTask;
@@ -117,9 +118,10 @@ public class StockHistoryDialogFragment extends DialogFragment {
         @Override
         protected void onPostExecute(LineSetWrapper wrapper) {
             LineSet set = wrapper.set;
-            if (set != null) {
+            Activity currentActivity = getActivity();
+            if (set != null && currentActivity != null) {
                 float diff = set.getValue(0) - set.getValue(1);
-                int color = ContextCompat.getColor(getActivity(), (diff < 0)
+                int color = ContextCompat.getColor(currentActivity, (diff < 0)
                         ? R.color.material_red_700 : R.color.material_green_700);
                 mChart.setAxisColor(color);
                 mChart.setLabelsColor(color);
